@@ -1,0 +1,178 @@
+@colors: {
+	light: #999999;
+	white:#ffffff;
+	blue: #06427e;
+};
+
+each(@colors,{
+  // 文字颜色
+  .c-@{key} { 
+    color:  @value; 
+  } 
+  // 背景颜色
+  .bc-@{key} {   
+    background: @value; 
+  } 
+  
+}) 
+.trs{
+	transition: 0.5;
+}
+.bs-b{ 
+	box-sizing: border-box;
+}
+.bs-c{
+	box-sizing: content-box; 
+}
+.flex {
+	display: flex;
+}
+
+.flex-warp {
+	.flex;
+	flex-wrap: wrap;
+}
+
+.flex-col {
+	.flex;
+	flex-direction: column;
+}
+
+.flex-col-center {
+	.flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.flex-sb {
+	.flex;
+	justify-content: space-between;
+}
+
+.flex-sb-ac {
+	.flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.flex-center {
+	.flex;
+	justify-content: center;
+	align-items: center;
+}
+.warp {
+	width: calc(100% - 32rem);
+	margin: 0 auto;
+}
+
+.w100p {
+	width: 100%;
+}
+
+.w50p {
+	width: 50%;
+}
+
+.fixed{
+	position: fixed;
+}
+.relative{
+	position: relative;
+}
+.abs {
+	position: absolute;
+}
+
+.tac {
+	text-align: center;
+}
+
+// --------------------------------------------
+@rem: 1rem;
+
+// --------------------------------------------
+.step-1(@i) when(@i<=50) {
+	.brs-@{i}{
+		border-radius: (@i / @rem);
+	}
+	.step-1(@i+1);
+}  
+.step-1(0);
+// --------------------------------------------
+.step-5(@index) when(@index<=100) {
+	.w-@{index} {
+		width: (@index / @rem);
+	}
+	.h-@{index} {
+		height: (@index / @rem);
+	}
+	.m-@{index} {
+		margin: (@index / @rem);
+	}
+	.m-t-@{index} {
+		margin-top: (@index / @rem);
+	}
+	.m-l-@{index} {
+		margin-left: (@index / @rem);
+	}
+	.m-r-@{index} {
+		margin-right: (@index / @rem);
+	}
+	.m-b-@{index} {
+		margin-bottom: (@index / @rem);
+	}
+	.m-0-@{index} {
+		margin: 0 (@index / @rem);
+	}
+	// 嵌套
+	// .margin-@{index}-0 {
+	// 	margin: 0 (@index / @rem);
+	// }
+	.p-@{index} {
+		padding: (@index / @rem);
+	}
+	.p-t-@{index} {
+		margin-top: (@index / @rem);
+	}
+	.p-l-@{index} {
+		margin-left: (@index / @rem);
+	}
+	.p-r-@{index} {
+		margin-right: (@index / @rem);
+	}
+	.p-b-@{index} {
+		margin-bottom: (@index / @rem);
+	}
+	.p-0-@{index} {
+		padding: 0 (@index / @rem);
+	}
+
+	.step-5(@index+5);
+} 
+.step-5(0);
+
+
+// --------------------------------------------
+.Position(@index) when(@index<=100) {
+	.top-@{index} {
+		top: (@index / @rem);
+	}
+
+	.bottom-@{index} {
+		bottom: (@index / @rem);
+	}
+
+	.left-@{index} {
+		left: (@index / @rem);
+	}
+
+	.right-@{index} {
+		right: (@index / @rem);
+	}
+
+	.Position(@index+10); //递归调用 达到循环目的
+}
+
+.Position(0);
+
+// --------------------------------------------

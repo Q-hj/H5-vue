@@ -1,28 +1,39 @@
+/*
+ * @Date: 2022-07-04 09:37:42
+ * @LastEditors: Mr.qin
+ * @LastEditTime: 2022-07-04 14:47:59
+ * @Description:
+ */
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
 
 Vue.use(VueRouter);
 
+import store from "@/store/index";
 const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: HomeView,
-  },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
+	{
+		path: "/Home",
+		name: "Home",
+		component: () => import("@/views/Home.vue"),
+	},
+	{
+		path: "*",
+		redirect: "Home",
+	},
 ];
 
 const router = new VueRouter({
-  routes,
+	routes,
 });
+
+// 添加路由
+store.state.menu.map(({ name, title, icon }) =>
+	router.addRoute({
+		name,
+		path: "/" + name,
+		meta: { title, icon },
+		component: () => import(`@/views/${name}.vue`),
+	})
+);
 
 export default router;

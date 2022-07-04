@@ -1,24 +1,34 @@
-# zlb_china_fire
+<!--
+ * @Date: 2022-07-04 09:38:20
+ * @LastEditors: Mr.qin
+ * @LastEditTime: 2022-07-04 10:27:02
+ * @Description: 描述文本
+-->
+
+# 浙里办-杭州消防
 
 ## Project setup
+
 ```
 pnpm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 pnpm run serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 pnpm run build
 ```
 
-### Lints and fixes files
-```
-pnpm run lint
-```
+## 依赖&插件
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- less
+
+- axios
+
+- vant-ui
