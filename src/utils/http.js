@@ -29,8 +29,6 @@ request.interceptors.request.use(
 		request.headers.post["Content-Type"] = "application/json;charset=utf-8"; //默认json格式
 		request.headers.get["Content-Type"] = "application/x-www-form-urlencoded";
 
-		// 获取token  (我这里的token是存在sessionStorage中的)
-
 		const token = sessionStorage.getItem("token") || "";
 		if (token) {
 			// 请求头中添加token
@@ -40,31 +38,6 @@ request.interceptors.request.use(
 			request.params = { ...request.params, token };
 			request.data = { ...request.data, token };
 		}
-
-		// 删除接口（post） 需要在 params 添加参数
-		// if (request.url.includes("del"))
-
-		// 如果为post请求 要做的事
-		// if (request.method == "post") {
-		//   request.data = JSON.stringify(request.data);
-		// request.transformRequest = [transformBody];
-		//   request.headers.post["Content-Type"] = "application/json;";
-		// }
-
-		// 接受二进制流
-		const blobUrls = ["captcha", "Execl"];
-		blobUrls.forEach((url) => {
-			if (!request.url.includes(url)) return;
-			request.headers["Content-Type"] = "application/json;charset=UTF-8";
-			request.responseType = "blob";
-		});
-		// if (request.url.includes("captcha"))
-		//   request.headers.post["Content-Type"] = "image/jpeg;";
-
-		//还可以根据需要更换根路径
-		// 假如 登录接口ip 与业务接口ip 不一样,可以这样更换
-		// if (request.url.includes("user/login")) request.baseURL = request.loginURL;
-
 		return request;
 	},
 	(error) => {

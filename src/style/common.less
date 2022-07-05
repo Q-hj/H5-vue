@@ -1,29 +1,40 @@
 @colors: {
-	light: #999999;
-	white:#ffffff;
+	deep: #363a45;
+	gray: #666a75;
+	light: #b3b5b9;
+	stroke: #e8e9ed;
+	white: #ffffff;
 	blue: #06427e;
-};
 
-each(@colors,{
-  // 文字颜色
-  .c-@{key} { 
-    color:  @value; 
-  } 
-  // 背景颜色
-  .bc-@{key} {   
-    background: @value; 
-  } 
-  
-}) 
-.trs{
+	success: #00B578;
+	warning: #FF6A2A;
+	error: #E63633;
+}
+
+each(@colors, {
+
+	// 文字颜色
+	.c-@{key} {
+		color: @value;
+	}
+
+	// 背景颜色
+	.bc-@{key} {
+		background: @value;
+	}
+
+}) .trs {
 	transition: 0.5;
 }
-.bs-b{ 
+
+.bs-b {
 	box-sizing: border-box;
 }
-.bs-c{
-	box-sizing: content-box; 
+
+.bs-c {
+	box-sizing: content-box;
 }
+
 .flex {
 	display: flex;
 }
@@ -45,6 +56,11 @@ each(@colors,{
 	justify-content: center;
 }
 
+.flex-ac {
+	.flex;
+	align-items: center;
+}
+
 .flex-sb {
 	.flex;
 	justify-content: space-between;
@@ -55,30 +71,26 @@ each(@colors,{
 	justify-content: space-between;
 	align-items: center;
 }
+
 .flex-center {
 	.flex;
 	justify-content: center;
 	align-items: center;
 }
+
 .warp {
 	width: calc(100% - 32rem);
 	margin: 0 auto;
 }
 
-.w100p {
-	width: 100%;
-}
-
-.w50p {
-	width: 50%;
-}
-
-.fixed{
+.fixed {
 	position: fixed;
 }
-.relative{
+
+.relative {
 	position: relative;
 }
+
 .abs {
 	position: absolute;
 }
@@ -87,43 +99,67 @@ each(@colors,{
 	text-align: center;
 }
 
+.w33p {
+	width: calc(100% / 3);
+}
+
 // --------------------------------------------
 @rem: 1rem;
+@pc: 1%;
 
 // --------------------------------------------
 .step-1(@i) when(@i<=50) {
-	.brs-@{i}{
+	.brs-@{i} {
 		border-radius: (@i / @rem);
 	}
+
 	.step-1(@i+1);
-}  
+}
+
 .step-1(0);
+
 // --------------------------------------------
 .step-5(@index) when(@index<=100) {
+	.w@{index}p {
+		width: (@index / @pc);
+	}
+
+	.h@{index}p {
+		height: (@index / @pc);
+	}
+
 	.w-@{index} {
 		width: (@index / @rem);
 	}
+
 	.h-@{index} {
 		height: (@index / @rem);
 	}
+
 	.m-@{index} {
 		margin: (@index / @rem);
 	}
+
 	.m-t-@{index} {
 		margin-top: (@index / @rem);
 	}
+
 	.m-l-@{index} {
 		margin-left: (@index / @rem);
 	}
+
 	.m-r-@{index} {
 		margin-right: (@index / @rem);
 	}
+
 	.m-b-@{index} {
 		margin-bottom: (@index / @rem);
 	}
+
 	.m-0-@{index} {
 		margin: 0 (@index / @rem);
 	}
+
 	// 嵌套
 	// .margin-@{index}-0 {
 	// 	margin: 0 (@index / @rem);
@@ -131,26 +167,31 @@ each(@colors,{
 	.p-@{index} {
 		padding: (@index / @rem);
 	}
+
 	.p-t-@{index} {
 		margin-top: (@index / @rem);
 	}
+
 	.p-l-@{index} {
 		margin-left: (@index / @rem);
 	}
+
 	.p-r-@{index} {
 		margin-right: (@index / @rem);
 	}
+
 	.p-b-@{index} {
 		margin-bottom: (@index / @rem);
 	}
+
 	.p-0-@{index} {
 		padding: 0 (@index / @rem);
 	}
 
 	.step-5(@index+5);
-} 
-.step-5(0);
+}
 
+.step-5(0);
 
 // --------------------------------------------
 .Position(@index) when(@index<=100) {

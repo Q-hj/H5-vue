@@ -1,11 +1,15 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-04 16:04:19
+ * @LastEditTime: 2022-07-05 11:47:12
  * @Description: 
 -->
 <template>
 	<div class="home">
+		<van-popup class="w70p" v-model="showPop"
+			><img class="w100p" src="../assets/image/index-pop.png" alt=""
+		/></van-popup>
+
 		<img class="title-bg w100p" src="../assets/image/title-bg.png" />
 		<nav class="flex-warp warp">
 			<router-link
@@ -29,9 +33,7 @@
 		name: "Home",
 		components: {},
 		data() {
-			return {
-				menu: store.state.menu,
-			};
+			return { showPop: false, menu: store.state.menu };
 		},
 		mounted() {},
 	};
