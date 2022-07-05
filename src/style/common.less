@@ -194,7 +194,7 @@ each(@colors, {
 .step-5(0);
 
 // --------------------------------------------
-.Position(@index) when(@index<=100) {
+.step-10(@index) when(@index<=100) {
 	.top-@{index} {
 		top: (@index / @rem);
 	}
@@ -211,9 +211,9 @@ each(@colors, {
 		right: (@index / @rem);
 	}
 
-	.Position(@index+10); //递归调用 达到循环目的
+	.step-10(@index+10);
 }
 
-.Position(0);
+.step-10(0);
 
 // --------------------------------------------
