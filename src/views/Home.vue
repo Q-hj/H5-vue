@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-08 16:14:04
+ * @LastEditTime: 2022-07-08 17:26:34
  * @Description: 
 -->
 <template>
@@ -14,7 +14,7 @@
 		<nav class="flex-center">
 			<router-link
 				tag="div"
-				class="nav-item w-100 h-100 m-5 t-20 margin-100 flex-col-center bc-white brs-15 border-light"
+				class="nav-item w-100 h-100 flex-col-center bc-white brs-15 border-light"
 				v-for="item in menu"
 				:key="item.name"
 				:to="item.name"

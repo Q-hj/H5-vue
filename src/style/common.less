@@ -1,8 +1,9 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-08 16:57:56
+ * @LastEditTime: 2022-07-08 17:27:44
  * @Description: 封装抽离常用的css代码
+ * @improve:  遍历单位，
  */
 @colors: {
 	deep: #363a45;
@@ -118,11 +119,6 @@ each(@colors, {
 	width: calc(100% / 3);
 }
 
-//  css单位无法直接拼接在属性值中，需设置变量，来进行运算得出
-@rem: 1rem;
-@pc: 1%;
-//  数字无法直接拼接在类名中，需设置变量
-@zero: 0;
 
 // --------------------------------------------
 .step-1(@i) when(@i<=50) {
@@ -166,6 +162,20 @@ each(@colors, {
 @steps: range(-100, 100, 5);
 
 
+//  css单位无法直接拼接在属性值中，需设置变量，来进行运算得出
+@rem: 1rem;
+@pc: 1%;
+// 单位
+@unit: @rem @pc;
+
+// .unit() {
+// 	-: @rem;
+// 	-p: @pc;
+// }
+
+//  数字无法直接拼接在类名中，需设置变量
+@zero: 0;
+
 /* 
 * 生成代码示例：
 .w-80 {
@@ -177,8 +187,14 @@ each(@colors, {
 .m-5{
 	margin:5rem;
 } 
-.p-r-15 {
-	margin-padding: 15rem;
+.m-0-50 {
+	margin:0 50rem;
+}
+.m-50p-0 {
+	margin: 50% 0;
+}
+.p-r-15p {
+	margin-padding: 15%;
 }
 .t--100 {
 	top: -100rem;
@@ -208,14 +224,29 @@ each(@steps, {
 			}
 
 			.@{margin-name}-@{zero}-@{value} {
-				@{margin-type}:@zero (@value / @rem);
+				@{margin-type}: @zero (@value / @rem);
+			}
+
+			.@{margin-name}-@{value}-@{zero} {
+				@{margin-type}: (@value / @rem) @zero;
+			}
+
+			.@{margin-name}-@{value}p-@{zero} {
+				@{margin-type}: (@value / @pc) @zero;
+			}
+
+			.@{margin-name}-@{zero}-@{value}p {
+				@{margin-type}: @zero (@value / @pc);
 			}
 
 			// 遍历方向
 			each(.direction(), .(@direction, @direction-name) {
-
 					.@{margin-name}-@{direction-name}-@{value} {
 						@{margin-type}-@{direction}: (@value / @rem);
+					}
+
+					.@{margin-name}-@{direction-name}-@{value}p {
+						@{margin-type}-@{direction}: (@value / @pc);
 					}
 
 					// 需要抽离，只执行一次
