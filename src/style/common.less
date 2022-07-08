@@ -11,6 +11,9 @@
 	error: #E63633;
 }
 
+@direction: left, right, top, bottom;
+// value: extract(@direction, 3);
+
 each(@colors, {
 
 	// 文字颜色
@@ -22,6 +25,12 @@ each(@colors, {
 	.bc-@{key} {
 		background: @value;
 	}
+
+	// 边框颜色
+	.border-@{key} {
+		border: 1px solid @value;
+	}
+
 
 }) .trs {
 	transition: 0.5;
@@ -106,6 +115,7 @@ each(@colors, {
 // --------------------------------------------
 @rem: 1rem;
 @pc: 1%;
+@zero: 0; //  数字无法直接拼接在类名中，需设置变量
 
 // --------------------------------------------
 .step-1(@i) when(@i<=50) {
@@ -118,102 +128,99 @@ each(@colors, {
 
 .step-1(0);
 
-// --------------------------------------------
-.step-5(@index) when(@index<=100) {
-	.w@{index}p {
-		width: (@index / @pc);
-	}
+/* 
+规定类名缩写和对应的属性名
 
-	.h@{index}p {
-		height: (@index / @pc);
-	}
-
-	.w-@{index} {
-		width: (@index / @rem);
-	}
-
-	.h-@{index} {
-		height: (@index / @rem);
-	}
-
-	.m-@{index} {
-		margin: (@index / @rem);
-	}
-
-	.m-t-@{index} {
-		margin-top: (@index / @rem);
-	}
-
-	.m-l-@{index} {
-		margin-left: (@index / @rem);
-	}
-
-	.m-r-@{index} {
-		margin-right: (@index / @rem);
-	}
-
-	.m-b-@{index} {
-		margin-bottom: (@index / @rem);
-	}
-
-	.m-0-@{index} {
-		margin: 0 (@index / @rem);
-	}
-
-	// 嵌套
-	// .margin-@{index}-0 {
-	// 	margin: 0 (@index / @rem);
-	// }
-	.p-@{index} {
-		padding: (@index / @rem);
-	}
-
-	.p-t-@{index} {
-		margin-top: (@index / @rem);
-	}
-
-	.p-l-@{index} {
-		margin-left: (@index / @rem);
-	}
-
-	.p-r-@{index} {
-		margin-right: (@index / @rem);
-	}
-
-	.p-b-@{index} {
-		margin-bottom: (@index / @rem);
-	}
-
-	.p-0-@{index} {
-		padding: 0 (@index / @rem);
-	}
-
-	.step-5(@index+5);
+*/
+// 宽高
+.size() {
+	w: width;
+	h: height;
 }
 
-.step-5(0);
-
-// --------------------------------------------
-.step-10(@index) when(@index<=100) {
-	.top-@{index} {
-		top: (@index / @rem);
-	}
-
-	.bottom-@{index} {
-		bottom: (@index / @rem);
-	}
-
-	.left-@{index} {
-		left: (@index / @rem);
-	}
-
-	.right-@{index} {
-		right: (@index / @rem);
-	}
-
-	.step-10(@index+10);
+// 边距
+.margin-type() {
+	m: margin;
+	p: padding;
 }
 
-.step-10(0);
+// 方向
+.direction() {
+	l: left;
+	r: right;
+	t: top;
+	b: bottom;
+}
 
-// --------------------------------------------
+//@steps:-100 -95 -90...95,100
+@steps: range(-100, 100, 5); //生成-100到100之间间隔为5的数
+
+
+/* 
+* 生成代码：
+.w-80 {
+	width: 80rem;
+}
+.h50p {
+	width: 50%;
+}
+.m-5{
+	margin:5rem;
+} 
+.p-r-15 {
+	margin-padding: 15rem;
+}
+.t--100 {
+	top: -100rem;
+}
+*/
+
+//遍历间隔范围,值为： @value
+each(@steps, {
+
+	// 遍历宽高
+	each(.size(), .(@size-type, @size-name) {
+
+			.@{size-name}-@{value} {
+				@{size-type}: (@value / @rem);
+			}
+
+			.@{size-name}@{value}p {
+				@{size-type}: (@value / @pc);
+			}
+		});
+
+	// 遍历边距类型
+	each(.margin-type(), .(@margin-type, @margin-name, @margin-index) {
+
+			.@{margin-name}-@{value} {
+				@{margin-type}: (@value / @rem);
+			}
+
+			.@{margin-name}-@{zero}-@{value} {
+				@{margin-type}:@zero (@value / @rem);
+			}
+
+			// 遍历方向
+			each(.direction(), .(@direction, @direction-name) {
+
+					.@{margin-name}-@{direction-name}-@{value} {
+						@{margin-type}-@{direction}: (@value / @rem);
+					}
+
+					// 需要抽离，只执行一次
+					.directionFn(@condition) when(@condition=true) {
+						.@{direction-name}-@{value} {
+							@{direction}: (@value / @rem);
+						}
+					}
+
+					//  @margin-index >1 时调用
+					.directionFn(boolean(@margin-index>1));
+				});
+
+
+		});
+
+
+});

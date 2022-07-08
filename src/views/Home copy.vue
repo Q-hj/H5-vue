@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-08 16:14:04
+ * @LastEditTime: 2022-07-05 11:47:12
  * @Description: 
 -->
 <template>
@@ -11,16 +11,16 @@
 		/></van-popup>
 
 		<img class="title-bg w100p" src="../assets/image/title-bg.png" />
-		<nav class="flex-center">
+		<nav class="flex-warp warp">
 			<router-link
 				tag="div"
-				class="nav-item w-100 h-100 m-5 t-20 margin-100 flex-col-center bc-white brs-15 border-light"
+				class="nav-item flex-col-center"
 				v-for="item in menu"
 				:key="item.name"
 				:to="item.name"
 			>
 				<img :src="require(`../assets/icon/${item.icon}.png`)" alt="" />
-				<span class="m-t-10">{{ item.title }}</span>
+				<span>{{ item.title }}</span>
 			</router-link>
 		</nav>
 		<p class="abs bottom-30 tac w100p c-light">版权所有 浙江省消防救援总队</p>
@@ -41,5 +41,19 @@
 <style lang="less" scoped>
 	nav {
 		transform: translateY(-40rem);
+		.nav-item {
+			background-color: #fff;
+			border-radius: 15rem;
+			width: calc(50% - 7.5rem);
+			height: 200rem;
+			border: 1px solid #cbc6c7;
+			margin-bottom: 10rem;
+			&:nth-child(odd) {
+				margin-right: 10rem;
+			}
+			span {
+				margin-top: 17rem;
+			}
+		}
 	}
 </style>
