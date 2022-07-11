@@ -1,12 +1,33 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-11 11:39:52
+ * @LastEditTime: 2022-07-11 11:56:05
  * @Description: 
 -->
 <template>
 	<div class="home">
-		<van-popup class="w70p" v-model="showPop">
+		<van-popup class="w70p bc-blue" v-model="showPop">
+			<div class="pop p-30">
+				<header class="c-white">预约须知</header>
+				<main class="c-white">
+					<p>
+						为了保证您的健康安全，请您在进行场馆预约的过程中，确认您所报名的群体已经做好新冠肺炎的防控工作。
+					</p>
+					<p>
+						预约成功后，请在预约时间段佩戴口罩前往，并配合所参观的场馆做好新冠肺炎防控工作（准备好健康码和行程码)，有序参观。
+					</p>
+					<p>
+						如遇到紧急情况，请积极配合工作人员安排。如拒不配合，危害到他人生命安全，工作人员有权追究其法律责任。
+					</p>
+				</main>
+				<footer
+					@click="showPop = false"
+					class="w100p h-40 brs-40 flex-center pointer c-white border-white m-t-10"
+				>
+					<van-icon name="success" />
+					<span class="m-l-5">我知道了</span>
+				</footer>
+			</div>
 			<!-- <img class="w100p" src="../assets/image/index-pop.png" alt=""
 		/> -->
 		</van-popup>
@@ -46,9 +67,9 @@
 		components: {},
 		data() {
 			return {
-				showPop: false,
+				showPop: true,
 				menu: store.state.menu,
-				elder: store.state.elder,
+				elder: true || store.state.elder,
 			};
 		},
 		mounted() {
@@ -57,6 +78,13 @@
 	};
 </script>
 <style lang="less" scoped>
+	.pop {
+		main {
+			p {
+				margin-top: 10rem;
+			}
+		}
+	}
 	.translateY {
 		transform: translateY(-40rem);
 	}

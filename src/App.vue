@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-11 10:45:45
+ * @LastEditTime: 2022-07-11 11:50:50
  * @Description: 
 -->
 <template>
@@ -26,7 +26,7 @@
 				title: "浙江消防体验场馆预约系统",
 			});
 			const { uiStyle } = await ZWJSBridge.getUiStyle();
-			this.$store.commit("set_elder", true || uiStyle === "elder");
+			this.$store.commit("set_elder", uiStyle === "elder");
 		},
 	};
 </script>
