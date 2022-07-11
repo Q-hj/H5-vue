@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-08 17:27:44
+ * @LastEditTime: 2022-07-11 11:30:49
  * @Description: 封装抽离常用的css代码
  * @improve:  遍历单位，
  */
@@ -17,9 +17,6 @@
 	warning: #FF6A2A;
 	error: #E63633;
 }
-
-@direction: left, right, top, bottom;
-// value: extract(@direction, 3);
 
 each(@colors, {
 
@@ -39,8 +36,19 @@ each(@colors, {
 	}
 
 
+}) each(range(10, 80, 2), {
+
+	// 字体大小 
+	.fz-@{value} {
+		font-size: (@value / @rem);
+	}
+
 }) .trs {
 	transition: 0.5;
+}
+
+.m-center {
+	margin: 0 auto;
 }
 
 .bs-b {
@@ -160,7 +168,6 @@ each(@colors, {
  * 结果示例: -100 -95 -90...95, 100
  */
 @steps: range(-100, 100, 5);
-
 
 //  css单位无法直接拼接在属性值中，需设置变量，来进行运算得出
 @rem: 1rem;

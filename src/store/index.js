@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-04 15:11:51
+ * @LastEditTime: 2022-07-11 11:16:23
  * @Description: 全局状态
  */
 import Vue from "vue";
@@ -16,9 +16,14 @@ export default new Vuex.Store({
 			{ name: "Video", title: "消防视频", icon: "Video" },
 			{ name: "History", title: "历史记录", icon: "History" },
 		],
+		elder: false,
 	},
 	getters: {},
-	mutations: {},
+	mutations: {
+		set_elder(state, elder) {
+			state.elder = elder;
+		},
+	},
 	actions: {},
 	modules: {},
 });
