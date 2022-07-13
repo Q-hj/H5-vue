@@ -8,7 +8,7 @@ import { Toast } from "vant";
 const request = axios.create({
 	baseURL: process.env.VUE_APP_BASE_URL, // 设置请求根路径
 	// loginURL: "http://localhost:3000",
-	timeout: 1000 * 60, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
+	timeout: 1000 * 10, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
 });
 
 // 将参数转成Body 表单格式
@@ -70,15 +70,19 @@ request.interceptors.response.use(
 			} else {
 				Toast.fail("请先登录!");
 			}
-			router.push("/login");
+			// router.push("/home");
+			window.location.reload();
 
 			return Promise.resolve(res);
 		}
 
 		// 请求成功
-		if (response.status === 200) return Promise.resolve(res.result || res);
+		if (response.status === 200) {
+			if (res == 200) return Promise.resolve(res.result.data || res.result);
+			else return Promise.reject(res.result);
+		}
 
-		if (response.status === 500) return Promise.resolve(res.result);
+		if (response.status === 500) return Promise.reject(res.result);
 
 		return res;
 	},
@@ -101,12 +105,12 @@ request.interceptors.response.use(
 			504: "网关超时",
 		};
 
-		showTip && Toast.fail(httpCode[response.status] || "请求超时！");
+		Toast.fail(httpCode[response.status] || "请求超时！");
 
 		return Promise.reject(response); //catch捕获
 	}
 );
-
+console.log(request);
 /* 统一封装get请求 */
 export const get = (url, params, config = {}) => {
 	return new Promise((resolve, reject) => {

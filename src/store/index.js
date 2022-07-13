@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-11 11:16:23
+ * @LastEditTime: 2022-07-12 11:24:52
  * @Description: 全局状态
  */
 import Vue from "vue";
@@ -18,7 +18,9 @@ export default new Vuex.Store({
 		],
 		elder: false,
 	},
-	getters: {},
+	getters: {
+		elder: (state) => state.elder,
+	},
 	mutations: {
 		set_elder(state, elder) {
 			state.elder = elder;

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-11 11:56:05
+ * @LastEditTime: 2022-07-13 11:22:27
  * @Description: 
 -->
 <template>
@@ -67,13 +67,14 @@
 		components: {},
 		data() {
 			return {
-				showPop: true,
+				showPop: false,
 				menu: store.state.menu,
-				elder: true || store.state.elder,
+				elder: store.state.elder,
 			};
 		},
 		mounted() {
-			console.log(this.elder);
+			console.log(this.elder ? "适老化" : "常规ui");
+			console.log(window.location.href);
 		},
 	};
 </script>
