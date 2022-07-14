@@ -1,19 +1,27 @@
 <!--
  * @Date: 2022-07-04 09:38:20
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-13 11:54:30
+ * @LastEditTime: 2022-07-14 16:33:15
  * @Description: 描述文本
 -->
 
 # 浙里办-杭州消防
 
-## 当前任务
+## task
 
-- 封装请求
+- ~~封装请求~~
 
 - 引入并完善 store
 
-- 登录 token
+- ~~登录 token~~
+
+- 首页个人轨迹
+
+- 参观历史字段对接
+
+## improve
+
+- 自定义代码片段 结合封装的类 使用，例如 post 快速生成 this.get（"|",parmas）.then(..)...
 
 ## Project setup
 

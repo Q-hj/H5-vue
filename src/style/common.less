@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-12 11:00:13
+ * @LastEditTime: 2022-07-14 16:42:44
  * @Description: 封装抽离常用的css代码
  * @Improve:  遍历单位，
  */
@@ -222,8 +222,13 @@ each(@steps, {
 				@{size-type}: (@value / @rem);
 			}
 
-			.@{size-name}@{value}p {
-				@{size-type}: (@value / @pc);
+			.minFn(boolean(@value>=0));
+
+			// 大于0 执行生成 百分比宽度css
+			.minFn(@condition) when(@condition=true) {
+				.@{size-name}@{value}p {
+					@{size-type}: (@value / @pc);
+				}
 			}
 		});
 

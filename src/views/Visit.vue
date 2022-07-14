@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-05 16:36:28
+ * @LastEditTime: 2022-07-14 16:33:59
  * @Description: 参观预约
 -->
 <template>
@@ -161,7 +161,20 @@
 				vcodeTime: 60,
 			};
 		},
+		created() {
+			dd.device.location.get({
+				onSuccess: (res) => this.getVenceList(res),
+				onFail: (error) => this.$toast.fail(error.errorMessage),
+			});
+		},
+		mounted() {},
 		methods: {
+			getVenceList(res) {
+				const geocodedCode = res.townCode;
+				this.get("/fireBrigade/visit/open", { geocodedCode }).then((list) => {
+					console.log(list);
+				});
+			},
 			onChangeVisitDate({ value, selectedOptions }) {
 				this.showCascader = false;
 				[this.visitDate, this.visitTime] = selectedOptions.map(

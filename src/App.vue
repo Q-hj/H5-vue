@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-13 14:49:50
+ * @LastEditTime: 2022-07-14 16:17:34
  * @Description: 
 -->
 <template>
@@ -18,22 +18,22 @@
 				sk: "BCDSGS_22e2d810c606df32186709580c4b8b36",
 				ak: "BCDSGA_d5e7b25caecebf4a178260c6d27f6e46",
 				assetsUrl:
-					"http://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002207318/reserved/index.html?debug=true",
+					"https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002207318/reserved/index.html?debug=true",
 			};
 		},
 		async mounted() {
 			// JSBridge API 初始化
 			ZWJSBridge.onReady(() => {});
 
+			ZWJSBridge.setTitle({
+				title: "浙江消防体验场馆预约系统",
+			});
 			// 埋点初始化
 			// bury.init({
 			// 	autoTrack: true, //是否打开自动点击事件埋点，默认true打开，关闭传false
 			// 	appId: "2002207318", //必传，向埋点系统后台申请
 			// 	businessId: "8ec3d75da4ac4a1b90768aad88034a3d", //必传，向埋点系统后台申请
 			// });
-			ZWJSBridge.setTitle({
-				title: "浙江消防体验场馆预约系统",
-			});
 			// 获取当前是否为 适老版
 			const { uiStyle } = await ZWJSBridge.getUiStyle();
 			this.$store.commit("set_elder", uiStyle === "elder");
@@ -41,29 +41,29 @@
 			if (!this.getStore("token")) this.getTicket();
 		},
 		methods: {
+			// 获取页面路径中携带的票据
 			getTicket() {
-				var url = window.location.href; // 获取页面路由
-				// console.log(url);
-				let needLogin = 1;
-				if (url.indexOf("ticket") != -1) {
-					const ticket = url.split("=")[2].split("#")[0];
+				var url = window.location.href;
 
-					// 存在ticket 则去登录
-					if (ticket) {
-						needLogin = false;
-						const params = {
-							clientId: this.clientId,
-							code: ticket.replace("&debug", ""),
-						};
-						this.post("/mina/token", params).then((res) => {
-							console.log(res);
-							this.setStore("token", res.token_type + res.access_token);
-						});
-					}
-				}
-				// 进行单点登录
-				if (needLogin) this.singleLoginFun();
+				//false 时，重定向到测试版本 获取票据
+				let needLogin = url.indexOf("ticket") < 0;
+				needLogin = 0;
+				// 不存在ticket 则去获取
+				if (needLogin) return this.singleLoginFun();
+
+				// 存在ticket 则去登录
+				const ticket = url.split("=")[2]?.split("#")[0];
+
+				const params = {
+					clientId: this.clientId,
+					code:
+						"8a1189b5814447bf0181fbda17bd3455-ticket" || ticket.replace("&debug", ""),
+				};
+				this.post("/mina/token", params).then((res) => {
+					this.setStore("token", (res.token_type || "") + (res.access_token || ""));
+				});
 			},
+			// 单点登录
 			singleLoginFun() {
 				// 判断当前所处环境
 				const sUserAgent = window.navigator.userAgent.toLowerCase();
@@ -73,7 +73,7 @@
 				// 	sUserAgent.indexOf("alipay") > -1;
 
 				const appHref =
-					"http://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1";
+					"https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1";
 
 				const alimappHref =
 					"https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin";

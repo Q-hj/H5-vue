@@ -6,9 +6,8 @@ import { Toast } from "vant";
 
 // create an axios instance
 const request = axios.create({
-	baseURL: process.env.VUE_APP_BASE_URL, // 设置请求根路径
-	// loginURL: "http://localhost:3000",
-	timeout: 1000 * 10, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
+	baseURL: "/api" || process.env.VUE_APP_BASE_URL, // 设置请求根路径
+	timeout: 1000 * 60, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
 });
 
 // 将参数转成Body 表单格式
@@ -26,17 +25,17 @@ request.interceptors.request.use(
 	(request) => {
 		// do something before request is sent
 		// 设置请求头
-		request.headers.post["Content-Type"] = "application/json;charset=utf-8"; //默认json格式
-		request.headers.get["Content-Type"] = "application/x-www-form-urlencoded";
+		request.headers.get["Content-Type"] = "application/json"; //默认json格式
+		request.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 
-		const token = sessionStorage.getItem("token") || "";
+		const token = sessionStorage.getItem("token");
+
 		if (token) {
 			// 请求头中添加token
-			// request.headers["Authorization"] = "Bearer " + token;
-
+			request.headers["Authorization"] = token;
 			// 在参数中添加token
-			request.params = { ...request.params, token };
-			request.data = { ...request.data, token };
+			// request.params = { ...request.params, token };
+			// request.data = { ...request.data, token };
 		}
 		return request;
 	},
@@ -54,6 +53,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
 	(response) => {
 		const res = response.data;
+
 		// 剖析：response（http响应）  -->  res（http响应体）  -->  result（后端接口结果）
 
 		// response.status  http状态码
@@ -62,7 +62,7 @@ request.interceptors.response.use(
 
 		// const permissions = response.status === 401 || res.code == 401;
 
-		if (response.status === 401 || res.code == 401) {
+		if (response.status === 401 || res.code == 401 || res.code == 100) {
 			// 权限不足
 			if (sessionStorage.getItem("token")) {
 				sessionStorage.clear("token");
@@ -71,23 +71,21 @@ request.interceptors.response.use(
 				Toast.fail("请先登录!");
 			}
 			// router.push("/home");
-			window.location.reload();
+			// window.location.reload();
 
 			return Promise.resolve(res);
 		}
-
 		// 请求成功
 		if (response.status === 200) {
-			if (res == 200) return Promise.resolve(res.result.data || res.result);
-			else return Promise.reject(res.result);
+			if (res.code == 200) return Promise.resolve(res.data || res);
+			else Toast(res.message);
 		}
-
+		// 服务端错误
 		if (response.status === 500) return Promise.reject(res.result);
 
 		return res;
 	},
 	(error) => {
-		console.log(error);
 		const response = error.response;
 		const method = error.config.method;
 		console.error(`[${method}]请求失败:` + error.config.url);
@@ -105,12 +103,11 @@ request.interceptors.response.use(
 			504: "网关超时",
 		};
 
-		Toast.fail(httpCode[response.status] || "请求超时！");
+		// Toast.fail(httpCode[response.status] || "请求超时！");
 
 		return Promise.reject(response); //catch捕获
 	}
 );
-console.log(request);
 /* 统一封装get请求 */
 export const get = (url, params, config = {}) => {
 	return new Promise((resolve, reject) => {
@@ -128,6 +125,7 @@ export const get = (url, params, config = {}) => {
 			});
 	});
 };
+// call 重新 调用 get
 
 /* 统一封装post请求 */
 export const post = (url, data, config = {}) => {

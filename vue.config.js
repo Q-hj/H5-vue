@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-06-08 09:58:28
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-05 11:24:18
+ * @LastEditTime: 2022-07-14 14:38:06
  * @Description:
  */
 
@@ -21,7 +21,18 @@ module.exports = {
 	devServer: {
 		host: "localhost",
 		port: 8080,
-		proxy: process.env.VUE_APP_BASE_URL,
+
+		proxy: {
+			// 以下将 “api” 重写为 VUE_APP_BASE_URL
+			"/api": {
+				target: process.env.VUE_APP_BASE_URL, //对应自己的接口
+				changeOrigin: true,
+				ws: true,
+				pathRewrite: {
+					"^/api": "",
+				},
+			},
+		},
 	},
 	//其他配置....
 	configureWebpack: {

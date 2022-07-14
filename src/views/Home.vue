@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-13 11:22:27
+ * @LastEditTime: 2022-07-14 16:13:04
  * @Description: 
 -->
 <template>
@@ -74,7 +74,11 @@
 		},
 		mounted() {
 			console.log(this.elder ? "适老化" : "常规ui");
-			console.log(window.location.href);
+			return;
+			const params = { page: 1, pageSize: 10 };
+			this.get("/notifications", params).then(({ records }) => {
+				console.log(records);
+			});
 		},
 	};
 </script>

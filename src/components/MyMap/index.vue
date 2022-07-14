@@ -1,12 +1,12 @@
 <!--
  * @Date: 2022-06-08 10:35:50
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-05 15:03:55
+ * @LastEditTime: 2022-07-13 16:26:19
  * @Description: 地图
 -->
 <template>
 	<div class="myMap">
-		<div ref="map" :style="{ width, height }"></div>
+		<div id="map" ref="map" :style="{ width, height }"></div>
 	</div>
 </template>
 
@@ -29,12 +29,14 @@
 			},
 			position: {
 				type: Object,
-				default: () => {
-					return {
-						longitude: 0, //经度
-						latitude: 0, //纬度
-					};
-				},
+				default: () => ({
+					longitude: 0, //经度
+					latitude: 0, //纬度
+				}),
+			},
+			markers: {
+				type: Array,
+				default: () => [],
 			},
 		},
 		watch: {},
@@ -50,50 +52,47 @@
 		},
 		beforeDestroy() {
 			this.map = null;
-			this.clickListener && qq.maps.event.removeListener(this.clickListener);
+			// this.clickListener && qq.maps.event.removeListener(this.clickListener);
 		},
 		methods: {
 			/**
 			 * 位置信息在地图上展示
 			 */
 			initMap() {
-				var myLatlng = new qq.maps.LatLng(
-					this.position.latitude,
-					this.position.longitude
-				);
-				var myOptions = {
-					zoom: 16,
-					center: myLatlng,
-				};
-				//获取dom元素添加地图信息
-				this.map = new qq.maps.Map(this.$refs.map, myOptions);
-
-				//给定位的位置添加图片标注
-				this.marker = new qq.maps.Marker({
-					position: myLatlng,
-					map: this.map,
-					draggable: true, //允许鼠标拖动
+				const { longitude, latitude } = this.position;
+				this.map = new AMap.Map("map", {
+					resizeEnable: true,
+					center: [longitude, latitude],
+					zoom: 13,
 				});
-
-				if (this.clickable) this.bindMapClickListener();
+				//实时路况图层
+				var trafficLayer = new AMap.TileLayer.Traffic({
+					zIndex: 10,
+				});
+				this.map.add(trafficLayer); //添加图层到地图
+			},
+			addMarkers() {
+				//创建信息窗体
+				const infoWindow = new AMap.InfoWindow({
+					isCustom: true, //使用自定义窗体
+					content: "<div>信息窗体</div>", //信息窗体的内容可以是任意html片段
+					offset: new AMap.Pixel(16, -45),
+				});
+				const markers = this.markers.map(
+					(venue) =>
+						new AMap.Marker({
+							position: [venue.longitude, venue.latitude],
+						})
+				);
+				markers.forEach(
+					(marker) =>
+						marker.on("click", (e) =>
+							infoWindow.open(this.map, e.target.getPosition())
+						) //打开信息窗体
+				);
 			},
 			bindMapClickListener() {
-				this.clickListener = qq.maps.event.addListener(
-					this.map,
-					"click",
-					(event) => {
-						const longitude = event.latLng.getLng();
-						const latitude = event.latLng.getLat();
-						this.$emit("onClick", { longitude, latitude });
-
-						this.marker.setMap(null); //清除标记
-						// 添加标记
-						this.marker = new qq.maps.Marker({
-							position: new qq.maps.LatLng(latitude, longitude),
-							map: this.map,
-						});
-					}
-				);
+				// this.clickListener
 			},
 		},
 	};

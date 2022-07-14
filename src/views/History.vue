@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-05 14:45:19
+ * @LastEditTime: 2022-07-14 14:48:35
  * @Description: 历史记录
 -->
 <template>
@@ -124,14 +124,23 @@
 					status: 0,
 				});
 				if (index) this.evaluateList = result;
-				else this.visitList = result;
+				else this.getVisitList();
 			},
 		},
 		created() {
 			this.currentIndex = 0;
 		},
-		mounted() {},
+		mounted() {
+			ZWJSBridge.setTitle({
+				title: "历史记录",
+			});
+		},
 		methods: {
+			async getVisitList() {
+				const params = { page: 1, pageSize: 10 };
+				const { records } = await this.get("/fireVisitAPPT/page", params);
+				this.visitList = records;
+			},
 			handleChange(index) {
 				this.currentIndex = index;
 			},
