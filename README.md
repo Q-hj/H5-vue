@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:38:20
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-14 16:33:15
+ * @LastEditTime: 2022-07-15 10:32:31
  * @Description: 描述文本
 -->
 
@@ -10,18 +10,20 @@
 ## task
 
 - ~~封装请求~~
-
+- ~~登录 token~~
 - 引入并完善 store
 
-- ~~登录 token~~
+- 地图无法点击 （容器？）
+
+- 详情页
+
+- 视频页
 
 - 首页个人轨迹
 
 - 参观历史字段对接
 
 ## improve
-
-- 自定义代码片段 结合封装的类 使用，例如 post 快速生成 this.get（"|",parmas）.then(..)...
 
 ## Project setup
 

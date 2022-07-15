@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-04 14:47:59
+ * @LastEditTime: 2022-07-15 10:21:45
  * @Description:
  */
 import Vue from "vue";
@@ -15,6 +15,11 @@ const routes = [
 		path: "/Home",
 		name: "Home",
 		component: () => import("@/views/Home.vue"),
+	},
+	{
+		path: "/visitDetail",
+		name: "visitDetail",
+		component: () => import("@/views/visitDetail.vue"),
 	},
 	{
 		path: "*",

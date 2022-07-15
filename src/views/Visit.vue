@@ -1,12 +1,17 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-14 16:33:59
+ * @LastEditTime: 2022-07-15 10:09:03
  * @Description: 参观预约
 -->
 <template>
 	<div class="Visit warp">
-		<my-map class="m-t-10" :position="position"></my-map>
+		<my-map
+			ref="map"
+			v-if="position"
+			class="m-t-10"
+			:position="position"
+		></my-map>
 		<van-form label-width="5em" @submit="onSubmit">
 			<van-field
 				left-icon="location-o"
@@ -16,7 +21,7 @@
 				readonly
 				click-input="handleSelect"
 				placeholder="请选择（点击地图定位）"
-				:rules="[{ required: true }]"
+				:rules="[{ required: false }]"
 			>
 				<!-- <img src="../assets/icon/input-1.png" alt="" srcset="" /> -->
 			</van-field>
@@ -33,7 +38,7 @@
 			<van-popup v-model="showCascader" round position="bottom">
 				<van-cascader
 					title="请选择参观日期"
-					:options="options"
+					:options="dateOptions"
 					active-color="#06427e"
 					@close="showCascader = false"
 					@finish="onChangeVisitDate"
@@ -76,12 +81,20 @@
 				:rules="[{ validator: validatorTel, message: '手机号码格式不正确' }]"
 			>
 				<template #button>
-					<van-button size="small" @click="getCode" plain type="info"
-						>发送验证码</van-button
-					>
+					<van-button size="small" @click="getCode" plain type="info">{{
+						vcodeTime > 0 ? vcodeTime : "发送验证码"
+					}}</van-button>
 				</template>
 			</van-field>
 
+			<van-field
+				left-icon="comment-circle-o"
+				v-model="form.vcode"
+				name="vcode"
+				label="验证码"
+				placeholder="请输入验证码"
+				:rules="[{ required: true, message: '' }]"
+			/>
 			<van-field
 				left-icon="user-circle-o"
 				v-model="form.contactName"
@@ -114,15 +127,13 @@
 </template>
 
 <script>
-	import myMap from "../components/MyMap/index.vue";
+	import { fommatDate } from "@/utils/date";
+	import myMap from "@/components/MyMap/index.vue";
 	export default {
 		components: { myMap },
 		data() {
 			return {
-				position: {
-					longitude: 116.376829,
-					latitude: 39.963459,
-				},
+				position: null,
 				fireBrigadeId: 0,
 				fireBrigadeName: "",
 				form: {
@@ -141,24 +152,14 @@
 				visitTime: "",
 				visitDateList: [],
 				showCascader: false,
-				options: [
-					{
-						text: "7-17",
-						value: "330000",
-						children: [{ text: "14:00 - 20:00", value: "14:00 - 20:00" }],
-					},
-					{
-						text: "7-18",
-						value: "320000",
-						children: [{ text: "14:00 - 20:00", value: "14:00 - 20:00" }],
-					},
-				],
+				dateOptions: [],
 				apptnumberMin: 1,
 				apptnumberMax: 100,
 				numberPlaceholder: "请输入参观人数",
 				vcode: null,
 				countdown: false,
-				vcodeTime: 60,
+				vcodeTime: 0,
+				vcodeTimer: null,
 			};
 		},
 		created() {
@@ -168,35 +169,94 @@
 			});
 		},
 		mounted() {},
+		beforeDestroy() {
+			this.vcodeTimer && clearInterval(this.vcodeTimer);
+		},
 		methods: {
-			getVenceList(res) {
-				const geocodedCode = res.townCode;
+			getVenceList({ longitude, latitude, townCode }) {
+				this.position = [longitude, latitude];
+				const geocodedCode = townCode;
+				this.geocodedCode = geocodedCode;
 				this.get("/fireBrigade/visit/open", { geocodedCode }).then((list) => {
-					console.log(list);
+					if (list.length) this.$refs.map.addMarkers(list);
+					this.current = list[0];
+					this.getVisitDate();
+				});
+			},
+			getVisitDate() {
+				const { id } = this.current;
+				this.get("/fireBrigade/visitDatesById", { id }).then((res) => {
+					this.dateOptions = res.map((date) => ({
+						value: date.visitDate,
+						text: fommatDate(date.visitDate),
+						children: date.visitTime.map((time) => ({
+							text: time,
+							value: time,
+						})),
+					}));
 				});
 			},
 			onChangeVisitDate({ value, selectedOptions }) {
 				this.showCascader = false;
+				// 输入框中内容
 				[this.visitDate, this.visitTime] = selectedOptions.map(
 					(option) => option.text
 				);
+				// 提交所需参数
+				// [this.eventTime, this.visitTime] = selectedOptions.map(
+				// 	(option) => option.value
+				// );
+				const { id } = this.current;
+				const date = selectedOptions[0].value;
+				this.eventTime = date;
+				this.get("/fireBrigade/visitDates", { id, date }).then((res) => {
+					this.apptnumberMax = res.apptnumberMax;
+					this.apptnumberMin = res.apptnumberMin;
+				});
 			},
-			onSubmit(values) {
-				console.log(values);
+			onSubmit(form) {
+				const { id } = this.current;
+				const { geocodedCode, eventTime, visitTime } = this;
+				const params = {
+					...form,
+					visitDateTime: undefined,
+					fireBrigadeName: undefined,
+					fireBrigadeId: id,
+					number: +form.number,
+					geocodedCode,
+					eventTime,
+					visitTime,
+				};
+				this.post("/fireVisitAPPT/submit", params).then(({ code }) => {
+					if (code == 200) this.$router.push("/History");
+				});
 			},
 			getCode() {
-				if (this.countdown) return;
+				if (this.countdown || this.vcodeTime > 0) return;
 				const resPhone = /^1[3|4|5|6|7|8|9][0-9]\d{8}$/;
 				const phone = this.form.contactNumber;
 
 				if (!phone) return this.$toast.fail("请填写手机号！");
 				if (!resPhone.test(phone)) return this.$toast.fail("手机号码格式不正确！");
 				// 发送验证码
-				// app.post("/sms/vcode", { phone }).then(({ message }) => {
-				//   app.lightTip("验证码已发送");
-				//   this.setData({ countdown: true, vcode: message });
-				//   this.handleCountdown();
-				// });
+				this.post("/sms/vcode", { phone }).then(({ code, message }) => {
+					if (code != 200) return this.$toast(message);
+					this.$toast("验证码已发送");
+					this.countdown = true;
+					// this.vcode = message;
+					this.handleCountdown();
+				});
+			},
+			// 倒计时
+			handleCountdown() {
+				this.vcodeTime = 60;
+				this.vcodeTimer = setInterval(() => {
+					this.vcodeTime--;
+					if (this.vcodeTime === 0) {
+						this.countdown = false;
+						clearInterval(this.vcodeTimer);
+					}
+				}, 1000);
 			},
 			validatorTel(phone) {
 				const resPhone = /^1[3|4|5|6|7|8|9][0-9]\d{8}$/;

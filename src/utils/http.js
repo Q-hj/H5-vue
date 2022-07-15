@@ -16,7 +16,7 @@ const transformBody = (data, headers) => {
 	for (let it in data) {
 		ret += encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
 	}
-	return ret.substr(0, ret.length - 1);
+	return ret.slice(0, -1);
 };
 
 // request interceptor
@@ -37,6 +37,8 @@ request.interceptors.request.use(
 			// request.params = { ...request.params, token };
 			// request.data = { ...request.data, token };
 		}
+		if (request.url.includes("sms/vcode"))
+			request.transformRequest = [transformBody];
 		return request;
 	},
 	(error) => {
@@ -62,7 +64,7 @@ request.interceptors.response.use(
 
 		// const permissions = response.status === 401 || res.code == 401;
 
-		if (response.status === 401 || res.code == 401 || res.code == 100) {
+		if (response.status === 401 || res.code == 401) {
 			// 权限不足
 			if (sessionStorage.getItem("token")) {
 				sessionStorage.clear("token");

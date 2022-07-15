@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-14 14:48:35
+ * @LastEditTime: 2022-07-15 10:21:37
  * @Description: 历史记录
 -->
 <template>
@@ -19,6 +19,7 @@
 					<span class="m-5">{{ item }}</span>
 				</div>
 			</nav>
+			<!-- 参观预约列表 -->
 			<div class="visit-list" v-show="!currentIndex">
 				<div class="flex-center" v-show="!visitList.length">
 					<img src="@/assets/icon/down.png" alt="" />
@@ -26,14 +27,15 @@
 				</div>
 				<div
 					class="list-item flex-sb-ac m-b-10 p-10 bc-white brs-10"
+					@click="toVisitDetail(item)"
 					v-for="(item, index) in visitList"
 					:key="index"
 				>
 					<div class="left flex-ac">
 						<img class="p-10 w-30" src="@/assets/icon/location.png" alt="" />
 						<div class="text">
-							<p class="m-b-10">{{ item.name }}</p>
-							<span class="c-light">{{ item.time }}</span>
+							<p class="m-b-10">{{ item.fireBrigadeName }}</p>
+							<span class="c-light">{{ item.created }}</span>
 						</div>
 					</div>
 					<img
@@ -43,6 +45,7 @@
 					/>
 				</div>
 			</div>
+			<!-- 参观评价列表 -->
 			<div class="evaluate-list" v-show="currentIndex">
 				<div class="flex-center" v-show="!evaluateList.length">
 					<img src="@/assets/icon/down.png" alt="" />
@@ -57,8 +60,8 @@
 						<div class="left flex-ac">
 							<img class="p-10 w-30" src="@/assets/icon/location.png" alt="" />
 							<div class="text">
-								<p class="m-b-10">{{ item.name }}</p>
-								<span class="c-light">三天前评价</span>
+								<p class="m-b-10">{{ item.fireBrigadeName }}</p>
+								<span class="c-light">{{ item.fireBrigadeName }}</span>
 							</div>
 						</div>
 						<img
@@ -140,6 +143,9 @@
 				const params = { page: 1, pageSize: 10 };
 				const { records } = await this.get("/fireVisitAPPT/page", params);
 				this.visitList = records;
+			},
+			toVisitDetail({ id }) {
+				this.$router.push({ path: "/visitDetail", query: id });
 			},
 			handleChange(index) {
 				this.currentIndex = index;
