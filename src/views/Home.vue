@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-14 16:13:04
+ * @LastEditTime: 2022-07-15 15:22:59
  * @Description: 
 -->
 <template>
@@ -40,7 +40,7 @@
 				class="nav-item m-5 brs-15"
 				:class="
 					elder
-						? 'color-item flex-center w80p h-90 m-l-10p '
+						? 'color-item flex-center  w80p h-90 m-l-10p '
 						: 'w-100 h-100 flex-col-center bc-white border-light'
 				"
 				v-for="item in menu"
@@ -48,6 +48,7 @@
 				:to="item.name"
 			>
 				<img
+					class="w-40"
 					:src="require(`../assets/icon/${item.icon}${elder ? '-o' : ''}.png`)"
 					alt=""
 				/>
@@ -56,11 +57,43 @@
 				}}</span>
 			</router-link>
 		</nav>
-		<p class="abs bottom-30 tac w100p c-light">版权所有 浙江省消防救援总队</p>
+
+		<div class="trackList warp m-t-10" v-if="trackList.length">
+			<p class="c-blue">我的轨迹</p>
+			<div
+				class="track-item p-20 flex-sb-ac brs-10 m-t-10"
+				v-for="item in trackList"
+				:key="item.eventId"
+				@click="toDetail(item)"
+			>
+				<div class="left">
+					<van-row>
+						<van-icon name="location-o" /><span>{{ item.title }}</span>
+					</van-row>
+					<van-row class="m-t-5">
+						<van-icon name="clock-o" /><span>{{ item.eventTime | fommatDate }}</span>
+					</van-row>
+					<p class="m-t-10 c-gray">
+						参观预约&nbsp;&nbsp; {{ item.updated | fommatDate }}
+					</p>
+				</div>
+				<div class="right flex-col-center">
+					<img
+						class="w-40"
+						:src="require(`../assets/image/status/track-${item.status}.png`)"
+						alt=""
+					/>
+					<span class="m-t-10">{{ item.status ? "申请通过" : "正在申请" }}</span>
+				</div>
+			</div>
+		</div>
+
+		<p class="fixed b-30 tac w100p c-light">版权所有 浙江省消防救援总队</p>
 	</div>
 </template>
 
 <script>
+	import { fommatDate } from "@/utils/date";
 	import store from "@/store/index";
 	export default {
 		name: "Home",
@@ -70,15 +103,26 @@
 				showPop: false,
 				menu: store.state.menu,
 				elder: store.state.elder,
+				trackList: [],
 			};
+		},
+		filters: {
+			fommatDate(time) {
+				return fommatDate(time);
+			},
 		},
 		mounted() {
 			console.log(this.elder ? "适老化" : "常规ui");
-			return;
+
 			const params = { page: 1, pageSize: 10 };
-			this.get("/notifications", params).then(({ records }) => {
-				console.log(records);
+			this.get("/notifications", params).then((data) => {
+				this.trackList = data;
 			});
+		},
+		methods: {
+			toDetail({ eventId }) {
+				this.$router.push({ path: "/visitDetail", query: { id: eventId } });
+			},
 		},
 	};
 </script>
@@ -106,5 +150,8 @@
 		&:nth-child(4) {
 			background: linear-gradient(90deg, #86f4f8, #5df29e);
 		}
+	}
+	.track-item {
+		background-color: #e7ecf2;
 	}
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 10:21:37
+ * @LastEditTime: 2022-07-15 15:34:14
  * @Description: 历史记录
 -->
 <template>
@@ -121,31 +121,32 @@
 		},
 		watch: {
 			currentIndex(index) {
-				const result = new Array(8).fill({
-					name: "西湖站",
-					time: "2022-7-03 12:00",
-					status: 0,
-				});
-				if (index) this.evaluateList = result;
+				if (index) this.getEvaluateList();
 				else this.getVisitList();
 			},
 		},
 		created() {
-			this.currentIndex = 0;
+			const index = this.$route.query.index;
+			this.currentIndex = index || 0;
 		},
 		mounted() {
-			ZWJSBridge.setTitle({
-				title: "历史记录",
-			});
+			// ZWJSBridge.setTitle({
+			// 	title: "历史记录",
+			// });
 		},
 		methods: {
 			async getVisitList() {
 				const params = { page: 1, pageSize: 10 };
 				const { records } = await this.get("/fireVisitAPPT/page", params);
-				this.visitList = records;
+				this.visitList = records || [];
+			},
+			async getEvaluateList() {
+				const params = { page: 1, pageSize: 10 };
+				const records = await this.get("/feedbackAPPT/feedbackList", params);
+				this.evaluateList = records || [];
 			},
 			toVisitDetail({ id }) {
-				this.$router.push({ path: "/visitDetail", query: id });
+				this.$router.push({ path: "/visitDetail", query: { id } });
 			},
 			handleChange(index) {
 				this.currentIndex = index;

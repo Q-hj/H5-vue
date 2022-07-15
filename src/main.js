@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-05 14:50:48
+ * @LastEditTime: 2022-07-15 15:27:42
  * @Description: 入口文件
  */
 import Vue from "vue";
@@ -13,7 +13,7 @@ import "./utils/index";
 import "./style/include.less";
 // import "./style/index";
 import VConsole from "vconsole";
-new VConsole();
+// new VConsole();
 Vue.config.productionTip = false;
 let sUserAgent = window.navigator.userAgent.toLowerCase();
 let bIsDtDreamApp = sUserAgent.indexOf("dtdreamweb") > -1; // 浙里办APP

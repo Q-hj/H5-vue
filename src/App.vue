@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 09:36:22
+ * @LastEditTime: 2022-07-15 15:18:14
  * @Description: 
 -->
 <template>
@@ -37,6 +37,7 @@
 			// 获取当前是否为 适老版
 			const { uiStyle } = await ZWJSBridge.getUiStyle();
 			this.$store.commit("set_elder", uiStyle === "elder");
+
 			// 不存在token 则先获取票据 然后进行登录
 			if (!this.getStore("token")) this.getTicket();
 		},
@@ -58,7 +59,7 @@
 				const params = {
 					clientId: this.clientId,
 					code:
-						"8a1189b4814448050181ff7ff2343868-ticket" || ticket.replace("&debug", ""),
+						"8a118a438144469701820067ee0b2148-ticket" || ticket.replace("&debug", ""),
 				};
 				this.post("/mina/token", params).then((res) => {
 					this.setStore("token", (res.token_type || "") + (res.access_token || ""));
