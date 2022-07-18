@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-06-08 10:35:50
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-14 20:21:36
+ * @LastEditTime: 2022-07-18 15:41:45
  * @Description: 地图
 -->
 <template>
@@ -19,6 +19,7 @@
 				height: "300px",
 				map: null,
 				marker: null,
+				infoWindow: null,
 				clickable: false,
 			};
 		},
@@ -46,6 +47,7 @@
 		},
 		mounted() {
 			this.initMap();
+			this.addMarkers();
 		},
 		beforeDestroy() {
 			this.map = null;
@@ -71,41 +73,50 @@
 				// 	zIndex: 10,
 				// });
 				// this.map.add(trafficLayer);
-
-				// let markerOption = new MarkerOptions();
-				// markerOption.position(this.position);
-				// markerOption.title("标题").snippet("今天考完试了很开心");
-				// markerOption.draggable(false);//设置Marker可拖动
-				// markerOption.icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon1));
-				// aMap.addMarker(markerOption);
 			},
 			addMarkers(markerList) {
-				//创建信息窗体
-				// const infoWindow = new AMap.InfoWindow({
-				// 	isCustom: true, //使用自定义窗体
-				// 	content: "<div>信息窗体</div>", //信息窗体的内容可以是任意html片段
-				// 	offset: new AMap.Pixel(16, -45),
-				// });
+				markerList = [
+					{
+						longitude: 120.227583,
+						latitude: 30.225813,
+						name: "测试测试测试",
+					},
+					{
+						longitude: 120.297583,
+						latitude: 30.275813,
+						name: "实例场馆",
+					},
+				];
 				markerList.map((venue) => {
 					const marker = new AMap.Marker({
 						position: [venue.longitude, venue.latitude],
 						map: this.map,
 						content:
 							`<img class="w-30" src="${require("./icon/maker.png")}" alt="">` ||
-							`<div class="flex-col-cneter border-deep brs-10">
-										<span class="c-white">${venue.name}</span>
-										<img src="${require("./icon/maker.png")}" alt="">
-									</div>`,
-						offset: new AMap.Pixel(-13, -30),
+							`<div class="flex-col-cneter  brs-10">
+											<span class="c-white">${venue.name}</span>
+											<img  src="${require("./icon/maker.png")}" alt="">
+										</div>`,
+						offset: new AMap.Pixel(-15, -15),
 					});
-					AMap.event.addListener(marker, "click", (e) => console.log(e));
-					// marker.on("click", (e) => {
-					// 	console.log(e);
-					// 	infoWindow.open(this.map, e.target.getPosition());
-					// }); //打开信息窗体
+					Object.assign(marker, venue); //将场馆属性添加到maker中
+
+					// AMap.event.addListener(marker, "click", (e) => console.log(e.target));
+
+					marker.on("click", ({ target }) => {
+						const { name } = target;
+						const content = `<div class='bc-white lh-30 p-0-10 brs-15 '>${name}</div>`;
+						//创建信息窗体
+						this.infoWindow = new AMap.InfoWindow({
+							isCustom: true, //使用自定义窗体
+							content, //信息窗体的内容可以是任意html片段
+							offset: new AMap.Pixel(0, -10),
+						});
+						this.infoWindow.open(this.map, target.getPosition());
+					}); //打开信息窗体
+
 					this.map.add(marker);
 				});
-				// markers.forEach((marker) => {});
 			},
 		},
 	};

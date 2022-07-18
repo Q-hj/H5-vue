@@ -1,16 +1,16 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 10:09:03
+ * @LastEditTime: 2022-07-18 14:35:32
  * @Description: 参观预约
 -->
 <template>
 	<div class="Visit warp">
 		<my-map
 			ref="map"
-			v-if="position"
+			v-if="position || 1"
 			class="m-t-10"
-			:position="position"
+			:position="position || [120.227583, 30.225813]"
 		></my-map>
 		<van-form label-width="5em" @submit="onSubmit">
 			<van-field

@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 13:59:59
+ * @LastEditTime: 2022-07-18 14:28:35
  * @Description: 
 -->
 <template>
@@ -29,6 +29,7 @@
 			};
 		},
 		async mounted() {
+			return;
 			// JSBridge API 初始化
 			ZWJSBridge.onReady(() => {});
 
