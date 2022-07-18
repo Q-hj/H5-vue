@@ -59,7 +59,7 @@
 				const params = {
 					clientId: this.clientId,
 					code:
-						"8a1189b68144483a018201104bf4019f-ticket" || ticket.replace("&debug", ""),
+						"8a118a428144471301820f41638f435b-ticket" || ticket.replace("&debug", ""),
 				};
 				this.post("/mina/token", params).then((res) => {
 					this.setStore("token", (res.token_type || "") + (res.access_token || ""));

@@ -1,12 +1,12 @@
 /*
  * @Date: 2022-06-08 09:58:28
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-14 14:38:06
+ * @LastEditTime: 2022-07-18 10:20:08
  * @Description:
  */
 
 console.log("正在启动......");
-
+// console.log(process.env.VUE_APP_BASE_URL);
 module.exports = {
 	publicPath: "./",
 	// publicPath: "/dist/",

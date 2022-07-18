@@ -3,7 +3,6 @@ import Vue from "vue";
 import router from "@/router";
 
 import { Toast } from "vant";
-
 // create an axios instance
 const request = axios.create({
 	baseURL: "/api" || process.env.VUE_APP_BASE_URL, // 设置请求根路径

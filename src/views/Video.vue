@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:37
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 17:07:20
+ * @LastEditTime: 2022-07-18 10:36:40
  * @Description: 视频
 -->
 <template>
@@ -18,8 +18,9 @@
 			<van-tab v-for="item in videoType" :title="item.description" :key="item.id">
 				<p class="tac m-t-20 c-gray" v-if="!videoList.length">暂无该类型视频</p>
 				<div
+					@click="toDetail(i)"
 					class="video-item flex-sb-ac m-t-10"
-					v-for="item in videoList"
+					v-for="(item, i) in videoList"
 					:key="item.id"
 				>
 					<img class="w40p" src="@/assets/image/title-bg.png" alt="" />
@@ -55,7 +56,6 @@
 				};
 				this.post("/video/page", params).then(({ records }) => {
 					this.videoList = records;
-					console.log(records);
 				});
 			},
 		},
@@ -68,6 +68,13 @@
 				this.get("/video/type").then((res) => {
 					this.videoType = res || [];
 					if (res.length) this.currentType = res[0].id;
+				});
+			},
+			toDetail(index) {
+				const videoList = this.videoList;
+				this.$router.push({
+					path: "/videoDetail",
+					query: { videoList, index },
 				});
 			},
 		},
