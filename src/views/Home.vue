@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 16:44:33
+ * @LastEditTime: 2022-07-18 16:59:12
  * @Description: 
 -->
 <template>
@@ -139,7 +139,7 @@
 				//false 时，重定向到测试版本 获取票据
 				let needLogin = url.indexOf("ticket") < 0;
 				// 不存在ticket 则去获取
-				if (needLogin) return this.singleLoginFun();
+				// if (needLogin) return this.singleLoginFun();
 
 				// this.singleLoginFun();
 
@@ -152,7 +152,7 @@
 				const params = {
 					clientId: this.clientId,
 					code:
-						// "8a118afc81444846018210693a347fe3-ticket" ||
+						"8a1189378144481301821087ae062f10-ticket" ||
 						this.ticket.replace("&debug", ""),
 				};
 				console.log(params.code);

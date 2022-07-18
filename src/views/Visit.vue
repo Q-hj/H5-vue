@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 14:35:32
+ * @LastEditTime: 2022-07-18 17:00:05
  * @Description: 参观预约
 -->
 <template>
@@ -163,10 +163,13 @@
 			};
 		},
 		created() {
-			dd.device.location.get({
-				onSuccess: (res) => this.getVenceList(res),
-				onFail: (error) => this.$toast.fail(error.errorMessage),
-			});
+			ZWJSBridge.getLocation()
+				.then((result) => {
+					this.getVenceList(result);
+				})
+				.catch((error) => {
+					this.$toast.fail(error.errorMessage);
+				});
 		},
 		mounted() {},
 		beforeDestroy() {
