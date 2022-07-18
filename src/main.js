@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 15:27:42
+ * @LastEditTime: 2022-07-18 16:11:03
  * @Description: 入口文件
  */
 import Vue from "vue";
@@ -20,8 +20,15 @@ let bIsDtDreamApp = sUserAgent.indexOf("dtdreamweb") > -1; // 浙里办APP
 let bIsAlipayMini =
 	sUserAgent.indexOf("miniprogram") > -1 && sUserAgent.indexOf("alipay") > -1; //支付宝浙里办小程序
 
-new Vue({
-	router,
-	store,
-	render: (h) => h(App),
-}).$mount("#app");
+ZWJSBridge.getUiStyle()
+	.then(({ uiStyle }) => {
+		window.isOlder = uiStyle == "elder";
+		new Vue({
+			router,
+			store,
+			render: (h) => h(App),
+		}).$mount("#app");
+	})
+	.catch((err) => {
+		console.log(err);
+	});

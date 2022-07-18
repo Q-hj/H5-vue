@@ -1,11 +1,11 @@
 <!--
  * @Date: 2022-06-08 10:35:50
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 15:41:45
+ * @LastEditTime: 2022-07-18 15:48:18
  * @Description: 地图
 -->
 <template>
-	<div class="myMap">
+	<div class="myMap w100p">
 		<div id="map" ref="map" :style="{ width, height }"></div>
 	</div>
 </template>
@@ -58,16 +58,15 @@
 			 * 位置信息在地图上展示
 			 */
 			initMap() {
-				var clickHandler = function (e) {
-					console.log(e.lnglat);
-				};
 				this.map = new AMap.Map("map", {
 					resizeEnable: true,
 					clickable: true,
 					center: this.position,
 					zoom: 11,
 				});
-				this.map.on("click", clickHandler);
+
+				// this.map.on("click", (e)=>console.log(e.lnglat));
+
 				//实时路况图层
 				// var trafficLayer = new AMap.TileLayer.Traffic({
 				// 	zIndex: 10,
@@ -121,8 +120,4 @@
 		},
 	};
 </script>
-<style scoped lang="less">
-	.myMap {
-		width: 100%;
-	}
-</style>
+<style scoped lang="less"></style>

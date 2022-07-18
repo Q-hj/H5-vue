@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 14:01:19
+ * @LastEditTime: 2022-07-18 16:17:27
  * @Description: 
 -->
 <template>
@@ -111,15 +111,62 @@
 				return fommatDate(time);
 			},
 		},
-		mounted() {
-			console.log(this.elder ? "适老化" : "常规ui");
+		async mounted() {
+			this.elder = window.isOlder;
+			console.log(this.elder ? "适老化模式" : "常规ui");
 
 			const params = { page: 1, pageSize: 10 };
-			this.get("/notifications", params).then((data) => {
+
+			// 不存在token 则先获取票据 然后进行登录
+			if (!this.getStore("token")) await this.getTicket();
+			await this.get("/notifications", params).then((data) => {
 				this.trackList = data;
 			});
 		},
 		methods: {
+			// 获取页面路径中携带的票据
+			getTicket() {
+				var url = window.location.href;
+
+				//false 时，重定向到测试版本 获取票据
+				let needLogin = url.indexOf("ticket") < 0;
+				// 不存在ticket 则去获取
+				// if (needLogin) return this.singleLoginFun();
+
+				// this.singleLoginFun();
+
+				// 存在ticket 则去登录
+				const ticket = url.split("=")[2]?.split("#")[0];
+
+				const params = {
+					clientId: this.clientId,
+					code:
+						"8a118afe814446950182104adcf67655-ticket" || ticket.replace("&debug", ""),
+				};
+				this.post("/mina/token", params).then((res) => {
+					this.setStore("token", (res.token_type || "") + (res.access_token || ""));
+				});
+			},
+			// 单点登录
+			singleLoginFun() {
+				// 判断当前所处环境
+				const sUserAgent = window.navigator.userAgent.toLowerCase();
+				const isApp = sUserAgent.indexOf("dtdreamweb") > -1; // 浙里办APP
+				// const bIsAlipayMini =
+				// 	sUserAgent.indexOf("miniprogram") > -1 &&
+				// 	sUserAgent.indexOf("alipay") > -1;
+
+				const appHref =
+					"https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1";
+
+				const alimappHref =
+					"https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin";
+				// 不同环境跳转不同路径
+				const getTicketUrl = isApp ? appHref : alimappHref;
+
+				window.location.href =
+					getTicketUrl + `&servicecode=${this.ak}&redirectUrl=${this.assetsUrl}`;
+			},
 			toDetail({ eventId }) {
 				this.$router.push({ path: "/visitDetail", query: { id: eventId } });
 			},
