@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 15:22:59
+ * @LastEditTime: 2022-07-18 14:01:19
  * @Description: 
 -->
 <template>
@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<p class="fixed b-30 tac w100p c-light">版权所有 浙江省消防救援总队</p>
+		<p class="b-30 lh-50 tac w100p c-light">版权所有 浙江省消防救援总队</p>
 	</div>
 </template>
 

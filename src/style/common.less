@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 15:02:05
+ * @LastEditTime: 2022-07-18 14:09:03
  * @Description: 封装抽离常用的css代码
  * @Improve:  遍历单位，
  */
@@ -17,6 +17,8 @@
 	warning: #FF6A2A;
 	error: #E63633;
 }
+
+@warp-margin: 16rem; //warp容器距离屏幕两侧的距离
 
 each(@colors, {
 
@@ -41,6 +43,12 @@ each(@colors, {
 	// 字体大小 
 	.fz-@{value} {
 		font-size: (@value / @rem);
+
+	}
+
+	// 行高
+	.lh-@{value} {
+		line-height: (@value / @rem);
 	}
 
 }) .trs {
@@ -103,7 +111,7 @@ each(@colors, {
 }
 
 .warp {
-	width: calc(100% - 32rem);
+	width: calc(100% - (@warp-margin *2));
 	margin: 0 auto;
 }
 

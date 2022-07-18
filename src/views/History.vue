@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 15:34:14
+ * @LastEditTime: 2022-07-18 13:56:15
  * @Description: 历史记录
 -->
 <template>
@@ -127,7 +127,7 @@
 		},
 		created() {
 			const index = this.$route.query.index;
-			this.currentIndex = index || 0;
+			this.currentIndex = +index || 0;
 		},
 		mounted() {
 			// ZWJSBridge.setTitle({

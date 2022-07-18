@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-12 11:24:52
+ * @LastEditTime: 2022-07-18 11:41:19
  * @Description: 全局状态
  */
 import Vue from "vue";
@@ -17,6 +17,7 @@ export default new Vuex.Store({
 			{ name: "History", title: "历史记录", icon: "History" },
 		],
 		elder: false,
+		LOADING: false,
 	},
 	getters: {
 		elder: (state) => state.elder,
@@ -24,6 +25,12 @@ export default new Vuex.Store({
 	mutations: {
 		set_elder(state, elder) {
 			state.elder = elder;
+		},
+		showLoading(state) {
+			state.LOADING = true;
+		},
+		hideLoading(state) {
+			state.LOADING = false;
 		},
 	},
 	actions: {},

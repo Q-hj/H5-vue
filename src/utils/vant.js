@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 11:08:33
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 16:01:21
+ * @LastEditTime: 2022-07-18 11:33:42
  * @Description: 引入vant组件
  */
 import Vue from "vue";
@@ -18,7 +18,9 @@ import { Popup } from "vant";
 import { Icon } from "vant";
 import { Row, Col } from "vant";
 import { Tab, Tabs } from "vant";
+import { Loading } from "vant";
 
+Vue.use(Loading);
 Vue.use(Tab).use(Tabs);
 Vue.use(Row).use(Col);
 Vue.use(Icon);

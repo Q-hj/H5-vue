@@ -1,12 +1,13 @@
 import axios from "axios";
 import Vue from "vue";
 import router from "@/router";
+import store from "@/store";
 
-import { Toast } from "vant";
+import { Toast, Loading } from "vant";
 // create an axios instance
 const request = axios.create({
 	baseURL: "/api" || process.env.VUE_APP_BASE_URL, // 设置请求根路径
-	timeout: 1000 * 60, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
+	timeout: 1000 * 5, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
 });
 
 // 将参数转成Body 表单格式
@@ -22,6 +23,7 @@ const transformBody = (data, headers) => {
 // 发送请求前的统一处理。。。
 request.interceptors.request.use(
 	(request) => {
+		store.commit("showLoading");
 		// do something before request is sent
 		// 设置请求头
 		request.headers.get["Content-Type"] = "application/json"; //默认json格式
@@ -41,6 +43,7 @@ request.interceptors.request.use(
 		return request;
 	},
 	(error) => {
+		store.commit("hideLoading");
 		// do something with request error
 		// 假如发送请求失败
 		console.log(error); // for debug
@@ -53,6 +56,7 @@ request.interceptors.request.use(
 // 请求后的处理
 request.interceptors.response.use(
 	(response) => {
+		store.commit("hideLoading");
 		const res = response.data;
 
 		// 剖析：response（http响应）  -->  res（http响应体）  -->  result（后端接口结果）
@@ -87,6 +91,7 @@ request.interceptors.response.use(
 		return res;
 	},
 	(error) => {
+		store.commit("hideLoading");
 		const response = error.response;
 		const method = error.config.method;
 		console.error(`[${method}]请求失败:` + error.config.url);

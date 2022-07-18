@@ -1,17 +1,24 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-15 15:18:14
+ * @LastEditTime: 2022-07-18 13:59:59
  * @Description: 
 -->
 <template>
 	<div id="app">
+		<Loading v-show="LOADING"></Loading>
 		<router-view />
 	</div>
 </template>
 <script>
+	import { mapState } from "vuex";
+	import Loading from "@/components/Loading/index.vue";
 	export default {
 		name: "app",
+		components: { Loading },
+		computed: {
+			...mapState(["LOADING"]),
+		},
 		data() {
 			return {
 				clientId: "vGy66er3qfKpXEQddgyDmyXa2RQucgg5",
@@ -59,7 +66,7 @@
 				const params = {
 					clientId: this.clientId,
 					code:
-						"8a118a428144471301820f41638f435b-ticket" || ticket.replace("&debug", ""),
+						"8a1189378144481301820fd7b71a27e6-ticket" || ticket.replace("&debug", ""),
 				};
 				this.post("/mina/token", params).then((res) => {
 					this.setStore("token", (res.token_type || "") + (res.access_token || ""));
@@ -91,6 +98,7 @@
 
 <style lang="less">
 	#app {
+		min-height: 80vh;
 		// background-color: #f4f4f4;
 	}
 </style>

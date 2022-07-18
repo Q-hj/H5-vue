@@ -1,13 +1,13 @@
 <!--
  * @Date: 2022-07-18 11:22:29
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 11:22:40
+ * @LastEditTime: 2022-07-18 11:31:23
  * @Description: 视频组件
 -->
 <template>
 	<div class="container" :class="[{ an: isAndroid, ios: isiOS }]">
 		<video
-			id="first-video"
+			id="my-video"
 			width="100%"
 			height="100%"
 			x5-video-player-type="h5"
@@ -97,7 +97,7 @@
 	};
 </script>
 <style scoped>
-	#first-video {
+	#my-video {
 		object-fit: fill;
 	}
 	.container {
