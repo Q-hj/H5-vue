@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 16:14:22
+ * @LastEditTime: 2022-07-18 16:21:27
  * @Description: 
 -->
 <template>
@@ -20,13 +20,7 @@
 			...mapState(["LOADING"]),
 		},
 		data() {
-			return {
-				clientId: "vGy66er3qfKpXEQddgyDmyXa2RQucgg5",
-				sk: "BCDSGS_22e2d810c606df32186709580c4b8b36",
-				ak: "BCDSGA_d5e7b25caecebf4a178260c6d27f6e46",
-				assetsUrl:
-					"https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002207318/reserved/index.html?debug=true",
-			};
+			return {};
 		},
 		async mounted() {
 			// JSBridge API 初始化

@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 16:11:03
+ * @LastEditTime: 2022-07-18 16:51:54
  * @Description: 入口文件
  */
 import Vue from "vue";
@@ -15,11 +15,8 @@ import "./style/include.less";
 import VConsole from "vconsole";
 // new VConsole();
 Vue.config.productionTip = false;
-let sUserAgent = window.navigator.userAgent.toLowerCase();
-let bIsDtDreamApp = sUserAgent.indexOf("dtdreamweb") > -1; // 浙里办APP
-let bIsAlipayMini =
-	sUserAgent.indexOf("miniprogram") > -1 && sUserAgent.indexOf("alipay") > -1; //支付宝浙里办小程序
 
+// 获取当前ui模式，再实例化vue
 ZWJSBridge.getUiStyle()
 	.then(({ uiStyle }) => {
 		window.isOlder = uiStyle == "elder";

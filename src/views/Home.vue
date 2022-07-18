@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 16:17:27
+ * @LastEditTime: 2022-07-18 16:44:33
  * @Description: 
 -->
 <template>
@@ -100,6 +100,14 @@
 		components: {},
 		data() {
 			return {
+				// token相关
+				clientId: "vGy66er3qfKpXEQddgyDmyXa2RQucgg5",
+				sk: "BCDSGS_22e2d810c606df32186709580c4b8b36",
+				ak: "BCDSGA_d5e7b25caecebf4a178260c6d27f6e46",
+				assetsUrl:
+					"https://mapi.zjzwfw.gov.cn/web/mgop/gov-open/zj/2002207318/reserved/index.html?debug=true",
+				ticket: "",
+				// ------
 				showPop: false,
 				menu: store.state.menu,
 				elder: store.state.elder,
@@ -131,18 +139,23 @@
 				//false 时，重定向到测试版本 获取票据
 				let needLogin = url.indexOf("ticket") < 0;
 				// 不存在ticket 则去获取
-				// if (needLogin) return this.singleLoginFun();
+				if (needLogin) return this.singleLoginFun();
 
 				// this.singleLoginFun();
 
 				// 存在ticket 则去登录
-				const ticket = url.split("=")[2]?.split("#")[0];
+				this.ticket = url.split("=")[2]?.split("#")[0];
 
+				this.getToken();
+			},
+			getToken() {
 				const params = {
 					clientId: this.clientId,
 					code:
-						"8a118afe814446950182104adcf67655-ticket" || ticket.replace("&debug", ""),
+						// "8a118afc81444846018210693a347fe3-ticket" ||
+						this.ticket.replace("&debug", ""),
 				};
+				console.log(params.code);
 				this.post("/mina/token", params).then((res) => {
 					this.setStore("token", (res.token_type || "") + (res.access_token || ""));
 				});
