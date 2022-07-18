@@ -121,7 +121,6 @@
 		},
 		async mounted() {
 			this.elder = window.isOlder;
-			console.log(this.elder ? "适老化模式" : "常规ui");
 
 			const params = { page: 1, pageSize: 10 };
 
@@ -139,7 +138,7 @@
 				//false 时，重定向到测试版本 获取票据
 				let needLogin = url.indexOf("ticket") < 0;
 				// 不存在ticket 则去获取
-				// if (needLogin) return this.singleLoginFun();
+				if (needLogin) return this.singleLoginFun();
 
 				// this.singleLoginFun();
 

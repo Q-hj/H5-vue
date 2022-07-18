@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 16:21:27
+ * @LastEditTime: 2022-07-18 17:09:36
  * @Description: 
 -->
 <template>
@@ -26,6 +26,7 @@
 			// JSBridge API 初始化
 			ZWJSBridge.onReady(() => {});
 
+			console.log(window.isOlder ? "适老化模式" : "常规ui");
 			ZWJSBridge.setTitle({
 				title: "浙江消防体验场馆预约系统",
 			});
