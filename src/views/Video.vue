@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:37
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-19 10:55:18
+ * @LastEditTime: 2022-07-19 17:08:14
  * @Description: 视频
 -->
 <template>
@@ -23,7 +23,7 @@
 					v-for="(item, i) in videoList"
 					:key="item.id"
 				>
-					<img class="w40p" src="@/assets/image/title-bg.png" alt="" />
+					<img class="w40p" src="@/assets/image/cover.jpg" alt="" />
 					<div class="w60p p-10">
 						<p class="lh-20">{{ item.title }}</p>
 					</div>

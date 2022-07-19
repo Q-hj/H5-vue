@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 17:45:15
+ * @LastEditTime: 2022-07-19 17:02:55
  * @Description: 
 -->
 <template>
@@ -27,6 +27,7 @@
 			ZWJSBridge.onReady(() => {});
 
 			console.log(window.isOlder ? "适老化模式" : "常规ui");
+
 			ZWJSBridge.setTitle({
 				title: "消防体验场馆预约",
 			});

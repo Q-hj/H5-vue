@@ -158,7 +158,7 @@
 				const params = {
 					clientId: this.clientId,
 					code: this.test
-						? "8a1189b4814448050182145d767b4087-ticket"
+						? "8a118852814446f6018215b2b7aa6220-ticket"
 						: this.ticket.replace("&debug", ""),
 				};
 				console.log(params.code);
