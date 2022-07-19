@@ -1,14 +1,15 @@
 <!--
  * @Date: 2022-07-15 17:14:15
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 11:30:52
+ * @LastEditTime: 2022-07-19 11:06:07
  * @Description: 视频播放页
 -->
 <template>
 	<div class="">
 		<!-- <video :src="fommatUrl(video.videoUrl) || video.videoUrl | fommatUrl"></video> -->
 
-		<my-video v-if="videoUrl" :url="videoUrl"> </my-video>
+		<my-video v-if="videoUrl" :url="videoUrl" :title="video.title"> </my-video>
+		<!-- <p class="fixed b-30">{{ video.title }}</p> -->
 	</div>
 </template>
 

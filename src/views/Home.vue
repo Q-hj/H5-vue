@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 16:59:12
+ * @LastEditTime: 2022-07-19 10:51:59
  * @Description: 
 -->
 <template>
@@ -88,7 +88,11 @@
 			</div>
 		</div>
 
-		<p class="b-30 lh-50 tac w100p c-light">版权所有 浙江省消防救援总队</p>
+		<p :class="test ? 'm-t-60' : 'fixed b-20'" class="lh-30 tac w100p c-light">
+			<span>浙江政务服务网</span><br />
+			<span>本服务由提供</span><br />
+			<span>资讯服务热线：</span><br />
+		</p>
 	</div>
 </template>
 
@@ -112,6 +116,7 @@
 				menu: store.state.menu,
 				elder: store.state.elder,
 				trackList: [],
+				test: process.env.NODE_ENV == "development",
 			};
 		},
 		filters: {
@@ -122,15 +127,17 @@
 		async mounted() {
 			this.elder = window.isOlder;
 
-			const params = { page: 1, pageSize: 10 };
-
-			// 不存在token 则先获取票据 然后进行登录
-			if (!this.getStore("token")) await this.getTicket();
-			await this.get("/notifications", params).then((data) => {
-				this.trackList = data;
-			});
+			// 不存在token 则先获取票据 然后进行登录  再获取轨迹列表
+			if (this.getStore("token")) this.getTrackList();
+			else this.getTicket();
 		},
 		methods: {
+			getTrackList() {
+				const params = { page: 1, pageSize: 10 };
+				this.get("/notifications", params).then((data) => {
+					this.trackList = data;
+				});
+			},
 			// 获取页面路径中携带的票据
 			getTicket() {
 				var url = window.location.href;
@@ -138,9 +145,9 @@
 				//false 时，重定向到测试版本 获取票据
 				let needLogin = url.indexOf("ticket") < 0;
 				// 不存在ticket 则去获取
-				if (needLogin) return this.singleLoginFun();
 
-				// this.singleLoginFun();
+				if (needLogin && !this.test) return this.singleLoginFun();
+				// else if (this.test) this.singleLoginFun();
 
 				// 存在ticket 则去登录
 				this.ticket = url.split("=")[2]?.split("#")[0];
@@ -150,13 +157,14 @@
 			getToken() {
 				const params = {
 					clientId: this.clientId,
-					code:
-						"8a1189378144481301821087ae062f10-ticket" ||
-						this.ticket.replace("&debug", ""),
+					code: this.test
+						? "8a1189b4814448050182145d767b4087-ticket"
+						: this.ticket.replace("&debug", ""),
 				};
 				console.log(params.code);
 				this.post("/mina/token", params).then((res) => {
 					this.setStore("token", (res.token_type || "") + (res.access_token || ""));
+					this.getTrackList();
 				});
 			},
 			// 单点登录
@@ -171,13 +179,17 @@
 				const appHref =
 					"https://puser.zjzwfw.gov.cn/sso/mobile.do?action=oauth&scope=1";
 
-				const alimappHref =
+				const alimAppHref =
 					"https://puser.zjzwfw.gov.cn/sso/alipay.do?action=ssoLogin";
 				// 不同环境跳转不同路径
-				const getTicketUrl = isApp ? appHref : alimappHref;
+				const getTicketUrl = isApp ? appHref : alimAppHref;
 
 				window.location.href =
-					getTicketUrl + `&servicecode=${this.ak}&redirectUrl=${this.assetsUrl}`;
+					getTicketUrl +
+					`&servicecode=${this.ak}&redirectUrl=${this.assetsUrl.replace(
+						"reserved",
+						"0.0.1"
+					)}`;
 			},
 			toDetail({ eventId }) {
 				this.$router.push({ path: "/visitDetail", query: { id: eventId } });
@@ -186,6 +198,9 @@
 	};
 </script>
 <style lang="less" scoped>
+	.home {
+		min-height: 100vh;
+	}
 	.pop {
 		main {
 			p {

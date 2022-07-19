@@ -83,7 +83,7 @@ request.interceptors.response.use(
 		// 请求成功
 		if (response.status === 200) {
 			if (res.code == 200) return Promise.resolve(res.data || res);
-			else Toast(res.message);
+			else Toast(res.message || res.tips || "请求失败");
 		}
 		// 服务端错误
 		if (response.status === 500) return Promise.reject(res.result);

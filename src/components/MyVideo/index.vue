@@ -1,15 +1,19 @@
 <!--
  * @Date: 2022-07-18 11:22:29
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 11:31:23
+ * @LastEditTime: 2022-07-19 11:15:39
  * @Description: 视频组件
 -->
 <template>
-	<div class="container" :class="[{ an: isAndroid, ios: isiOS }]">
+	<div
+		class="container bc-black min-h-100vh flex-center"
+		:class="[{ an: isAndroid, ios: isiOS }]"
+	>
 		<video
+			ref="video"
 			id="my-video"
 			width="100%"
-			height="100%"
+			height="auto"
 			x5-video-player-type="h5"
 			x5-video-player-fullscreen="true"
 			x5-playsinline=""
@@ -37,6 +41,7 @@
 			v-if="isAndroid"
 			:src="poster"
 		/>
+		<p class="fixed b-50 c-light">{{ title }}</p>
 	</div>
 </template>
 <script>
@@ -44,6 +49,7 @@
 		name: "videoChild",
 		props: {
 			url: String,
+			title: String,
 			poster: String,
 		},
 		data() {
@@ -58,6 +64,9 @@
 				isAndroid: u.indexOf("Android") > -1 || u.indexOf("Adr") > -1, // android终端
 				isiOS: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), // ios终端
 			};
+		},
+		mounted() {
+			this.$refs.video.play();
 		},
 		methods: {
 			playvideo(event) {
@@ -98,19 +107,19 @@
 </script>
 <style scoped>
 	#my-video {
-		object-fit: fill;
+		/* object-fit: fill; */
 	}
 	.container {
-		position: fixed;
+		/* position: fixed;
 		top: 0;
 		left: 0;
 		bottom: 0;
 		right: 0;
-		z-index: 999;
+		z-index: 999; */
 	}
 	.play,
 	.platStart {
-		position: fixed;
+		/* position: fixed;
 		top: 0;
 		left: 0;
 		bottom: 0;
@@ -118,6 +127,6 @@
 		z-index: 999;
 		width: 100%;
 		height: 100%;
-		object-fit: fill;
+		object-fit: fill; */
 	}
 </style>

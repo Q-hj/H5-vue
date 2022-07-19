@@ -1,11 +1,12 @@
 /*
  * @Date: 2022-07-04 09:37:42
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 14:14:11
+ * @LastEditTime: 2022-07-19 11:02:14
  * @Description: 封装抽离常用的css代码
  * @Improve:  遍历单位，
  */
 @colors: {
+	black: #000;
 	deep: #363a45;
 	gray: #666a75;
 	light: #b3b5b9;
@@ -53,6 +54,14 @@ each(@colors, {
 
 }) .trs {
 	transition: 0.5;
+}
+
+.min-h-100vh {
+	min-height: 100vh;
+}
+
+.h-100vh {
+	height: 100vh;
 }
 
 .m-center {

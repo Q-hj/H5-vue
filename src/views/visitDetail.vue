@@ -88,9 +88,9 @@
 			});
 		},
 		mounted() {
-			// ZWJSBridge.setTitle({
-			// 	title: "预约详情",
-			// });
+			ZWJSBridge.setTitle({
+				title: "预约详情",
+			});
 		},
 		methods: {
 			handleChange(index) {

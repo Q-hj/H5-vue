@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:37
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 10:36:40
+ * @LastEditTime: 2022-07-19 10:55:18
  * @Description: 视频
 -->
 <template>
@@ -24,8 +24,8 @@
 					:key="item.id"
 				>
 					<img class="w40p" src="@/assets/image/title-bg.png" alt="" />
-					<div class="w60p">
-						<p>{{ item.title }}</p>
+					<div class="w60p p-10">
+						<p class="lh-20">{{ item.title }}</p>
 					</div>
 				</div>
 			</van-tab>
@@ -62,7 +62,11 @@
 		created() {
 			this.getVideoType();
 		},
-		mounted() {},
+		mounted() {
+			ZWJSBridge.setTitle({
+				title: "消防视频",
+			});
+		},
 		methods: {
 			getVideoType() {
 				this.get("/video/type").then((res) => {

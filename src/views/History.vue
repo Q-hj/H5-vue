@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-07-04 14:10:36
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-07-18 13:56:15
+ * @LastEditTime: 2022-07-19 10:46:53
  * @Description: 历史记录
 -->
 <template>
@@ -130,9 +130,9 @@
 			this.currentIndex = +index || 0;
 		},
 		mounted() {
-			// ZWJSBridge.setTitle({
-			// 	title: "历史记录",
-			// });
+			ZWJSBridge.setTitle({
+				title: "历史记录",
+			});
 		},
 		methods: {
 			async getVisitList() {
